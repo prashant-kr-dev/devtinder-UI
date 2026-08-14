@@ -16,7 +16,7 @@ const Requests = () => {
         { withCredentials: true }
       );
       dispatch(removeRequest(_id));
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const fetchRequests = async () => {
@@ -26,7 +26,7 @@ const Requests = () => {
       });
 
       dispatch(addRequests(res.data.data));
-    } catch (err) {}
+    } catch (err) { }
   };
 
   useEffect(() => {
@@ -43,8 +43,10 @@ const Requests = () => {
       <h1 className="text-bold text-white text-3xl">Connection Requests</h1>
 
       {requests.map((request) => {
-        const { _id, firstName, lastName, photoUrl, age, gender, about } =
-          request.fromUserId;
+        const from = request?.fromUserId;
+        if (!from) return null;
+        const { _id, firstName = '', lastName = '', photoUrl = '', age, gender, about = '' } = from;
+        if (!_id) return null;
 
         return (
           <div
@@ -68,13 +70,13 @@ const Requests = () => {
             <div>
               <button
                 className="btn btn-primary mx-2"
-                onClick={() => reviewRequest("rejected", request._id)}
+                onClick={() => reviewRequest("rejected", _id)}
               >
                 Reject
               </button>
               <button
                 className="btn btn-secondary mx-2"
-                onClick={() => reviewRequest("accepted", request._id)}
+                onClick={() => reviewRequest("accepted", _id)}
               >
                 Accept
               </button>
